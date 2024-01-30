@@ -1,8 +1,11 @@
 import installMap from "./install-map.json" assert { type: "json" };
 
+import fs from './fs.js';
+
 
 
 import {getFileStorage} from './idb-file-storage.js';
+fs.writeFile("/tes.txt", "lol").then(() => console.log("ok"))
 
 const installed = localStorage["installed"];
 
