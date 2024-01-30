@@ -1,5 +1,5 @@
-import { Application } from "./Application.js";
-import { Window } from "./Window.js";
+import { Application } from "./os/Application.js";
+import { Window } from "./os/Window.js";
 
 
 const HEIGHT = 50;
