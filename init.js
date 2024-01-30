@@ -28,7 +28,7 @@ const main = async () => {
 
   for (let i = 0; i < installMap.length; i++) {
     const dir = installMap[i];
-    const res = await fetch("/install-files/" + dir.path).then(res => res.blob());
+    const res = await fetch("./install-files/" + dir.path).then(res => res.blob());
     const dirname = path.dirname("/" + dir.path);
     await fs.mkdir(dirname);
     await fs.writeFile("/" + dir.path, res)
