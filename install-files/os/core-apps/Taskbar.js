@@ -53,6 +53,7 @@ function start() {
     `;
 
     app.openWindow(win);
+    win.setZIndex(9999999999)
   });
   return app;
 }

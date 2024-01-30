@@ -1,7 +1,14 @@
 import { Application } from "./Application.js";
 
 export class Window {
-    constructor(name) {
+    /**
+     * Constructor for creating a new application frame.
+     *
+     * @param {string} name - The name of the application
+     * @param {{width?: number, height?: number}} opts - Optional parameters for the application frame
+     * @return {void} 
+     */
+    constructor(name, opts) {
         /**
          * @type {Application[]}
          */
@@ -9,8 +16,8 @@ export class Window {
         this.id = "w-"+crypto.randomUUID()
         this.name = name || this.id;
 
-        this.width = 200;
-        this.height = 200;
+        this.width = opts?.width || 200;
+        this.height = opts?.height || 200;
 
         this.x = window.innerWidth / 2 - this.width / 2;
         this.y = window.innerHeight / 2 - this.height / 2;

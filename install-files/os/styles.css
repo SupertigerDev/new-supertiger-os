@@ -12,14 +12,21 @@ body {
     flex-direction: column;
     overflow: hidden;
 
+    box-shadow: 0 0 18px 2px rgba(0, 0, 0, 0.2);
+
+    animation: WindowOpenAnim 0.2s;
+    animation-fill-mode: forwards;
+
+
     border-radius: 6px;
     .topBar {
         display: flex;
-        background-color: rgb(60, 60, 60);
+        background-color: rgba(0,0,0,0.76);
+        backdrop-filter: blur(86px);
         height: 38px;
         align-items: center;
         padding-left: 4px;
-        padding-right: 2px;
+        padding-right: 4px;
         .title {
             flex: 1;
             flex-shrink: 0;
@@ -35,14 +42,26 @@ body {
             width: 38px;
             height: 26px;
             flex-shrink: 0;
-            background-color: gray;
             border-radius: 4px;
             margin-left: 8px;
+            &:hover {
+                background-color: rgba(0,0,0,0.46);
+            }
         }
     }
     .appContainer {
         display: flex;
-
         height: 100%;
+    }
+}
+
+@keyframes WindowOpenAnim {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
     }
 }

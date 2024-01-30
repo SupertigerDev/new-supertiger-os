@@ -1,5 +1,5 @@
 import Dexie from './dexie/dexie.js'
-import path from './path.js'
+import path, { basename } from './path.js'
 
 
 const db = new Dexie('hdd');
@@ -100,6 +100,24 @@ const createRootDir = async () => {
   await mkdir("/")
 }
 
+const readdir = async (dirname) => {
+
+  const dirnameWithTrailing = dirname.endsWith("/") ? dirname : dirname + "/";
+
+  const dirnamePartLength = dirnameWithTrailing.split("/").length;
+  return db.table("metadata")
+    .where("path")
+    .startsWith(dirnameWithTrailing)
+    .filter(data => {
+      const path = data.path;
+      if (path === "/") return false;
+      const partLength  = path.split("/").length;
+      return partLength === dirnamePartLength
+    })
+    .keys()
+}
+
+
 // import fs from 'fs/promises';
 
 
@@ -107,5 +125,7 @@ export default {
   writeFile,
   mkdir,
   readFile,
-  createRootDir
+  createRootDir,
+  readdir,
+  stat
 }

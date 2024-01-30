@@ -28,3 +28,8 @@ const os = new OS();
 
 os.openApplication("./core-apps/Desktop.js")
 os.openApplication("./core-apps/Taskbar.js")
+
+
+setTimeout(() => {
+    os.openApplication("./core-apps/FileBrowser.js")
+}, 1000);
