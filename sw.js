@@ -14,10 +14,13 @@ self.addEventListener('fetch', function(event) {
 
   if (!url.startsWith(location.origin)) return;
 
-  if (!pathname.startsWith("/hdd")) return;
+  const basePath = "/new-supertiger-os"
+
+
+  if (!pathname.startsWith(basePath + "/hdd")) return;
   
   event.respondWith( (async () => {
-      const blob = await getFile(pathname.substring(4))
+      const blob = await getFile(pathname.substring(4 + basePath.length))
       if (!blob) {
         return new Response("Not found", {status: 404})
       }
