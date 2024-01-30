@@ -1,0 +1,27 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <div id="root"></div>
+    </body>
+
+    
+    <script>
+
+        navigator.serviceWorker.register('sw.js', {type: 'module'}).then(function(reg){
+            if (reg.active) console.log('serviceworker installed');
+            else {
+                console.log("reloading");
+                location.reload();
+            }
+            
+            const script = document.createElement('script');
+            script.src = "./init.js";
+            script.type = "module";
+            document.head.appendChild(script); 
+        })
+        .catch(function(err){
+            console.log('registration failed: ' + err)
+        })
+    </script>
+</html>

@@ -1,5 +1,7 @@
 import { Application } from "./Application.js";
 import { getBasePath } from "./utils.js";
+
+
 export class OS {
     constructor() {
         /**
@@ -24,4 +26,5 @@ export class OS {
 
 const os = new OS();
 
-os.openApplication("./TestApp.js")
+os.openApplication("./core-apps/Desktop.js")
+os.openApplication("./core-apps/Taskbar.js")

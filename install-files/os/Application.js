@@ -19,6 +19,7 @@ export class Application {
     openWindow (window) {
       window.app = this;
       this.windows.push(window);
+      window.setZIndex(this.windows.length - 1);
       document.getElementById("root").appendChild(window.baseElement);
     }
     _ready () {

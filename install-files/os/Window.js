@@ -18,6 +18,7 @@ export class Window {
         this.frame = true;
         this.appContainer = createAppContainer(this);
         this.baseElement = createFrame(this);
+        this.zIndex = 0;
     }
     showFrame (value) {
         if (this.baseElement.querySelector(".topBar")) {
@@ -42,6 +43,10 @@ export class Window {
     setHeight (height) {
         this.height = height;
         this.baseElement.style.height = this.height + "px";
+    }
+    setZIndex (zIndex) {
+        this.zIndex = zIndex;
+        this.baseElement.style.zIndex = this.zIndex;
     }
 }
 
