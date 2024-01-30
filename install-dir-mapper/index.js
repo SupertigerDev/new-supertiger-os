@@ -9,7 +9,6 @@ const main = async () => {
     name: path.basename(p)
   }));
   await fs.writeFile("../install-map.json", JSON.stringify(transformedPaths))
-
 }
 
 

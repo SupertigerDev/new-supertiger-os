@@ -20,7 +20,6 @@ let rootDirCreated = false;
  * @return {Promise} a Promise that resolves when the file is written
  */
 const writeFile = async (dest, data) => {
-  await createRootDir()
   const blob = data instanceof Blob ? data : new Blob([data], {type: "text/plain"});
 
   const dirname = path.dirname(dest)
@@ -88,20 +87,25 @@ const mkdir = async (dirname) => {
   }
 }
 
+const readFile = async (path) => {
+  const details = await db.table("files").where("path").equals(path).first();
+  return details?.blob;
+}
+
 const createRootDir = async () => {
   if (rootDirCreated) {
     return;
   }
   rootDirCreated = true;
-  await mkdir("/").catch(() => {});
+  await mkdir("/")
 }
-createRootDir();
-
 
 // import fs from 'fs/promises';
-// fs.mkdir()
+
 
 export default {
   writeFile,
-  mkdir
+  mkdir,
+  readFile,
+  createRootDir
 }

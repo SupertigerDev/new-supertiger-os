@@ -1,14 +1,10 @@
+import fs from './fs.js';
 
 
-import { getFileStorage } from './idb-file-storage.js';
-
-let hdd;
 
 const getFile = async (pathname) => {
-  if (!hdd) {
-    hdd = await getFileStorage({name: "hdd"});
-  }
-  return hdd.get(pathname)
+  const file = await fs.readFile(pathname)
+  return file
 }
 
 self.addEventListener('fetch', function(event) {
@@ -21,7 +17,7 @@ self.addEventListener('fetch', function(event) {
   if (!pathname.startsWith("/hdd")) return;
   
   event.respondWith( (async () => {
-      const blob = await getFile(pathname.substring(5))
+      const blob = await getFile(pathname.substring(4))
       if (!blob) {
         return new Response("Not found", {status: 404})
       }

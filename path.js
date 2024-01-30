@@ -7,7 +7,7 @@
 export const dirname = (path) => {
   const parts = path.split("/");
   parts.pop();
-  if (parts[0] === "") return "/";
+  if (parts[0] === "" && parts.length === 1) return "/";
   return parts.join("/");
 }
 

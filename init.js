@@ -1,20 +1,17 @@
 import installMap from "./install-map.json" assert { type: "json" };
 
 import fs from './fs.js';
+await fs.createRootDir();
 
+import path from "./path.js";
 
-
-import {getFileStorage} from './idb-file-storage.js';
-fs.writeFile("/tes.txt", "lol").then(() => console.log("ok"))
 
 const installed = localStorage["installed"];
-
-
 
 const ready = () => {
   localStorage["installed"] = true;
   const style = document.createElement('link');
-  style.href = "./hdd/styles.css";
+  style.href = "./hdd/os/styles.css";
   style.rel = "stylesheet";
   document.head.appendChild(style);
 
@@ -27,13 +24,14 @@ const ready = () => {
 
 const main = async () => {
 
-  const hdd = await getFileStorage({name: "hdd"});
   // await hdd.clear()
 
   for (let i = 0; i < installMap.length; i++) {
     const dir = installMap[i];
     const res = await fetch("/install-files/" + dir.path).then(res => res.blob());
-    await hdd.put(dir.path, res)
+    const dirname = path.dirname("/" + dir.path);
+    await fs.mkdir(dirname);
+    await fs.writeFile("/" + dir.path, res)
   }
   ready();
 }
