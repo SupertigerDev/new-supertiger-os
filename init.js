@@ -10,6 +10,12 @@ const installed = localStorage["installed"];
 
 const ready = () => {
   localStorage["installed"] = true;
+  const styleicons = document.createElement('link');
+  styleicons.href = "./hdd/os/assets/material-icons/material-icons.css";
+  styleicons.rel = "stylesheet";
+  document.head.appendChild(styleicons);
+
+
   const style = document.createElement('link');
   style.href = "./hdd/os/styles.css";
   style.rel = "stylesheet";

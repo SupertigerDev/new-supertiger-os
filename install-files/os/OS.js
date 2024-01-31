@@ -26,10 +26,10 @@ export class OS {
 
 const os = new OS();
 
-os.openApplication("./core-apps/Desktop.js")
-os.openApplication("./core-apps/Taskbar.js")
+os.openApplication("./apps/Desktop.js")
+os.openApplication("./apps/Taskbar.js")
 
 
 setTimeout(() => {
-    os.openApplication("./core-apps/FileBrowser.js")
+    os.openApplication("./apps/FileBrowser.js")
 }, 1000);

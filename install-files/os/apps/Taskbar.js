@@ -30,11 +30,8 @@ function start() {
         animation: slideUp 0.2s;
         animation-fill-mode: forwards;
         animation-delay: 0.6s;
-        background-color: rgba(0,0,0,0.66);
-        backdrop-filter: blur(86px);
-        border-top: 1px solid rgba(255,255,255,0.2);
-        border-left: 1px solid rgba(255,255,255,0.2);
-        border-right: 1px solid rgba(255,255,255,0.2);
+        background-color: rgba(0,0,0,0.4);
+        border-bottom: 0;
       }
 
       @keyframes slideUp {

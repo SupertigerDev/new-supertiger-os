@@ -13,19 +13,26 @@ body {
     overflow: hidden;
 
     box-shadow: 0 0 18px 2px rgba(0, 0, 0, 0.2);
+    
+    
+    background-color: rgba(0,0,0,0.66);
+    backdrop-filter: blur(86px);
+    border: 1px solid rgba(255,255,255,0.2);
 
     animation: WindowOpenAnim 0.2s;
     animation-fill-mode: forwards;
 
 
+
     border-radius: 6px;
     .topBar {
         display: flex;
-        background-color: rgba(0,0,0,0.76);
-        backdrop-filter: blur(86px);
+        gap: 6px;
+        /* background-color: rgba(0,0,0,0.26); */
+        user-select: none;
         height: 38px;
         align-items: center;
-        padding-left: 4px;
+        padding-left: 8px;
         padding-right: 4px;
         .title {
             flex: 1;

@@ -5,7 +5,7 @@ export class Window {
      * Constructor for creating a new application frame.
      *
      * @param {string} name - The name of the application
-     * @param {{width?: number, height?: number}} opts - Optional parameters for the application frame
+     * @param {{width?: number, height?: number, icon?: string}} opts - Optional parameters for the application frame
      * @return {void} 
      */
     constructor(name, opts) {
@@ -15,6 +15,7 @@ export class Window {
         this.app = null;
         this.id = "w-"+crypto.randomUUID()
         this.name = name || this.id;
+        this.icon = opts?.icon || "";
 
         this.width = opts?.width || 200;
         this.height = opts?.height || 200;
@@ -88,11 +89,35 @@ const createAppContainer = (window) => {
     return appContainer;
 }
 
+/**
+ * Creates a top bar element for the given window.
+ *
+ * @param {Window} window - The window object for which the top bar is created
+ * @return {HTMLElement} The top bar element
+ */
 const createTopBar = (window) => {
     const topBar = document.createElement("div");
     topBar.classList.add("topBar");
 
+    topBar.addEventListener("mousedown", (e) => {
+        document.addEventListener("mousemove", onMouseMove)        
+        document.addEventListener("mouseup", () => {
+            document.removeEventListener("mousemove", onMouseMove)
+        }, {once: true})
+    })
+
+    const onMouseMove = ({ movementX, movementY }) => {
+        let rect = topBar.parentElement.getBoundingClientRect();
+        let leftValue = rect.left;
+        let topValue = rect.top;
+
+        window.setX(leftValue + movementX);
+        window.setY(topValue + movementY);
+    }
+
+
     topBar.innerHTML = `
+        ${window.icon ? `<span class="material-icons-round">${window.icon}</span>` : ''}
         <div class="title">${window.name}</div>
         <div class="closeButton">X</div>
     `
