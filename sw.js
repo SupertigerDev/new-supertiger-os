@@ -1,3 +1,4 @@
+import config from './config.js';
 import fs from './fs.js';
 
 
@@ -13,13 +14,10 @@ self.addEventListener('fetch', function(event) {
   const pathname = new URL(url).pathname;
   if (!url.startsWith(location.origin)) return;
   
-  const basePath = "/new-supertiger-os"
-  // const basePath = ""
-  
-  if (!pathname.startsWith(basePath + "/hdd")) return;
+  if (!pathname.startsWith(config.BASEPATH + "hdd")) return;
   
   event.respondWith((async () => {
-      const blob = await getFile(pathname.substring(4 + basePath.length))
+      const blob = await getFile(pathname.substring(3 + config.BASEPATH.length))
       if (!blob) {
         return new Response("Not found", {status: 404})
       }

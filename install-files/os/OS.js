@@ -1,3 +1,4 @@
+import config from "../../config.js";
 import fs from "../../fs.js";
 import { Application } from "./Application.js";
 import { getBasePath } from "./utils.js";
@@ -18,12 +19,12 @@ export class OS {
         if (!metadata?.app) {
             return alert("Invalid app")
         }
-        const {start} = await import("/hdd" + path);
+        const {start} = await import(config.BASEPATH + "hdd" + path);
         /**
          * @type {Application}
          */
         const app = start();
-        app.basePath = getBasePath(import.meta.resolve("/hdd"+ path)) + "/"
+        app.basePath = getBasePath(import.meta.resolve(config.BASEPATH + "hdd" + path)) + "/"
         this.applications.push(app);
         app._ready()
     }
