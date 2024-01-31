@@ -19,7 +19,8 @@ self.addEventListener('fetch', function(event) {
   const basePath = "/new-supertiger-os"
   // const basePath = ""
   
-  console.log("full path debug", pathname.substring(4 + basePath.length))
+  console.log({1: pathname.substring(4 + basePath.length), 2: basePath + "/hdd", 3: pathname.startsWith(basePath + "/hdd")})
+  
   if (!pathname.startsWith(basePath + "/hdd")) return;
   
   event.respondWith((async () => {
