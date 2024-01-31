@@ -190,6 +190,7 @@ const FileList = (props) => {
 
     const basename = () => path.basename(fileItemProps.path)
     const onDblClick = () => {
+      if (!metadata()?.directory) return;
       props.appendPath(basename())
     }
 
