@@ -1,3 +1,8 @@
+//ST_A
+//PACKAGE_NAME="supertiger.os.filebrowser"
+//ICON_PATH=""
+//END
+
 import fs from "../../../fs.js";
 import path from "../../../path.js";
 import { Application } from "../Application.js";
@@ -8,6 +13,7 @@ import {onCleanup, For, createSignal, Show, createEffect, onMount} from '../soli
 import {render} from '../solid-js/web/index.js'
 
 import html from '../solid-js/html/index.js'
+import OS from "../OS.js";
 
 function start() {
   const app = new Application();
@@ -190,7 +196,12 @@ const FileList = (props) => {
 
     const basename = () => path.basename(fileItemProps.path)
     const onDblClick = () => {
-      if (!metadata()?.directory) return;
+      if (!metadata()?.directory) {
+        if (basename().endsWith(".js")) {
+          OS.openApplication(fileItemProps.path)
+        }
+        return;
+      };
       props.appendPath(basename())
     }
 
@@ -202,10 +213,10 @@ const FileList = (props) => {
 
     return html`
       <div class=${() => `fileItem ${metadata()?.directory ? "folder" : "file"}`} ondblclick=${onDblClick}>
-        <span class="icon material-icons-round">${() => metadata()?.directory ? "folder" : "insert_drive_file"}</span>
+        <span class="icon material-icons-round">${() => metadata()?.app ? "extension" : metadata()?.directory ? "folder" : "insert_drive_file"}</span>
         ${() => basename()}
         <div class='data'>
-            ${() => metadata()?.type?.split("/")[1] || "Folder"} ${() => metadata()?.directory ? "" : ` • ${humanFileSize(metadata()?.size)}`}
+            ${() => metadata()?.app ? "Supertiger OS App" : metadata()?.type?.split("/")[1] || "Folder"} ${() => metadata()?.directory ? "" : ` • ${humanFileSize(metadata()?.size)}`}
         </div>
       </div>
     `
@@ -222,59 +233,6 @@ const FileList = (props) => {
 }
 
 
-
-const createFilesList = (win, appendDir) => {
-  const element = document.createElement("div");
-  element.classList.add("fileList");
-
-  element.addEventListener("dblclick", (e) => {
-    const target = e.target;
-    if (target instanceof HTMLDivElement) {
-      const closestTo = target.closest(".fileItem");
-      if (!closestTo.classList.contains("folder")) return;
-      const path = closestTo.getAttribute("data-path");
-      appendDir(path);
-      return;
-    }
-  })
-
-  const update = async (files) => {
-    element.innerHTML = "";
-    for (const file of files) {
-      const itemEl = document.createElement("div");
-      const basename = path.basename(file);
-      itemEl.classList.add("fileItem");
-      itemEl.setAttribute("data-path", basename);
-
-      const icon = document.createElement("span");
-      icon.classList.add("material-icons-round");
-      icon.classList.add("icon");
-      
-      itemEl.appendChild(icon);
-      
-      itemEl.append(basename);
-      
-      element.appendChild(itemEl);
-      
-      fs.stat(file).then(res => {
-        const isFolder = res.directory;
-        itemEl.classList.add(isFolder ? "folder" : "file");
-
-        icon.innerText = isFolder ? "folder" : "insert_drive_file";
-          itemEl.innerHTML += `
-          <div class='data'>
-            ${res.type?.split("/")[1] || "Folder"} ${isFolder ? "" : `• ${humanFileSize(res.size)}`}
-          </div>`;
-      })
-
-    }
-  }
-  
-  return {
-    element,
-    update
-  }
-}
-
-
-export { start };
+export { 
+  start
+};

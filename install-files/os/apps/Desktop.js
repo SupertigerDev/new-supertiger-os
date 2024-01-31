@@ -1,3 +1,8 @@
+//ST_A
+//PACKAGE_NAME="supertiger.os.desktop"
+//ICON_PATH=""
+//END
+
 import { Application } from "../Application.js";
 import { Window } from "../Window.js";
 import { styled } from "../utils.js";
@@ -62,4 +67,6 @@ function start() {
   return app;
 }
 
-export { start };
+export { 
+  start
+};

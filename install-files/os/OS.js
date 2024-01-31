@@ -1,3 +1,4 @@
+import fs from "../../fs.js";
 import { Application } from "./Application.js";
 import { getBasePath } from "./utils.js";
 
@@ -13,12 +14,16 @@ export class OS {
      * @param {string} path
      */
     async openApplication (path) {
-        const {start} = await import(path);
+        const metadata = await fs.stat(path);
+        if (!metadata?.app) {
+            return alert("Invalid app")
+        }
+        const {start} = await import("/hdd" + path);
         /**
          * @type {Application}
          */
         const app = start();
-        app.basePath = getBasePath(import.meta.resolve(path)) + "/"
+        app.basePath = getBasePath(import.meta.resolve("/hdd"+ path)) + "/"
         this.applications.push(app);
         app._ready()
     }
@@ -26,10 +31,14 @@ export class OS {
 
 const os = new OS();
 
-os.openApplication("./apps/Desktop.js")
-os.openApplication("./apps/Taskbar.js")
+export default {
+    openApplication: (path) => os.openApplication(path)
+}
+
+os.openApplication("/os/apps/Desktop.js")
+os.openApplication("/os/apps/Taskbar.js")
 
 
 setTimeout(() => {
-    os.openApplication("./apps/FileBrowser.js")
+    os.openApplication("/os/apps/FileBrowser.js")
 }, 1000);

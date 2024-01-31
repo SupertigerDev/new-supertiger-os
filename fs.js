@@ -8,6 +8,10 @@ db.version(1).stores({
   metadata: '++path, *name, size, type, createdAt, modifiedAt, directory',
   files: '++path, blob'
 })
+db.version(2).stores({
+  metadata: '++path, *name, size, type, createdAt, modifiedAt, directory, app',
+})
+
 
 
 let rootDirCreated = false;
@@ -30,11 +34,17 @@ const writeFile = async (dest, data) => {
     throw new Error("Directory does not exist! (" + dirname + ")");
   } 
 
+  let app = false;
+  if (dest.endsWith(".js")) {
+    app = await supertigerAppMetadata(blob)
+  }
+
   await db.table("metadata").put({
     path: dest,
     name: basename,
     size: blob.size,
     type: blob.type,
+    app,
     createdAt: Date.now(),
     modifiedAt: Date.now(),
     directory: false
@@ -120,6 +130,40 @@ const readdir = async (dirname) => {
 
 // import fs from 'fs/promises';
 
+
+const START = [47, 47, 83, 84, 95, 65] //ST_A
+const END = [47, 47, 69, 78, 68] //END
+
+/**
+ * Checks if the input blob is a Supertiger app.
+ *
+ * @param {Blob} blob - the input blob to be checked
+ * @return {{packageName: string, iconPath: string}} true if the input blob is a Supertiger app, false otherwise
+ */
+const supertigerAppMetadata = async (blob) => {
+  const reader = blob.stream().getReader()
+  const chunk = await reader.read()
+  const start = chunk.value.slice(0, START.length);
+  if (!areEqual(start, START)) return false;
+
+
+  const textDecoder = new TextDecoder();
+  const text = textDecoder.decode(chunk.value);
+  const endIndex = text.indexOf("//END");
+  if (endIndex === -1) return false;
+
+  const data = text.slice(START.length, endIndex).split(/\r?\n|\r|\n/g);
+  const formattedData = {};
+  for (let i = 0; i < data.length; i++) {
+    const [key, ...values] = data[i].replace("//", '').split("=");
+    if (!key) continue;
+    formattedData[key] = JSON.parse(values.join("="));
+  }
+  return formattedData;
+}
+
+
+const areEqual = (first, second) => first.length === second.length && first.every((value, index) => value === second[index]);
 
 export default {
   writeFile,
