@@ -11,19 +11,10 @@ self.addEventListener('fetch', function(event) {
   const url = event.request.url;
   
   const pathname = new URL(url).pathname;
-
- 
   if (!url.startsWith(location.origin)) return;
-  
   
   const basePath = "/new-supertiger-os"
   // const basePath = ""
-  
-  console.log({
-    1: pathname.substring(4 + basePath.length), 
-    2: pathname, 
-    3: pathname.startsWith(basePath + "/hdd")
-  })
   
   if (!pathname.startsWith(basePath + "/hdd")) return;
   
