@@ -34,7 +34,7 @@ function start() {
           position: absolute;
           inset: 0;
           opacity: 0;
-          background: url(${app.basePath + "../assets/wallpaper.jpg"});
+          background: url(${app.basePath + "../assets/wallpaper.webp"});
           animation: FadeInWallpaper 0.2s;
           animation-delay: 0.3s;
           animation-fill-mode: forwards;
