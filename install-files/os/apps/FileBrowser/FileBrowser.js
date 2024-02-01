@@ -220,7 +220,7 @@ const FileList = (props) => {
 
       const dirname = () => path.dirname(fileItemProps.path);
 
-      const iconFile = () => metadata()?.app?.ICON_PATH ? path.join(config.BASE_PATH, "/hdd" + dirname(), metadata()?.app?.ICON_PATH) : null;
+      const iconFile = () => metadata()?.app?.ICON_PATH ? path.join(config.BASEPATH, "/hdd" + dirname(), metadata()?.app?.ICON_PATH) : null;
 
 
       return html `
