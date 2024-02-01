@@ -1,0 +1,1 @@
+export const BASEPATH = "/new-supertiger-os/"
