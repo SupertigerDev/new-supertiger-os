@@ -14,7 +14,7 @@ import {render} from '../../solid-js/web/index.js'
 
 import html from '../../solid-js/html/index.js'
 import OS from "../../OS.js";
-
+import config from '../../../../config.js';
 function start() {
   const app = new Application();
 
@@ -220,7 +220,7 @@ const FileList = (props) => {
 
       const dirname = () => path.dirname(fileItemProps.path);
 
-      const iconFile = () => metadata()?.app?.ICON_PATH ? path.join("/hdd" + dirname(), metadata()?.app?.ICON_PATH) : null;
+      const iconFile = () => metadata()?.app?.ICON_PATH ? path.join(config.BASE_PATH, "/hdd" + dirname(), metadata()?.app?.ICON_PATH) : null;
 
 
       return html `
