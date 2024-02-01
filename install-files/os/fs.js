@@ -1,16 +1,31 @@
-import Dexie from './dexie/dexie.js'
-import path, { basename } from './path.js'
+import Dexie from '../../dexie/dexie.js'
+import path from './path.js'
 
+/**
+ *
+ * @type {Dexie}
+ */
+let db = new Dexie('hdd');
+let initComplete = false;
 
-const db = new Dexie('hdd');
+function init () {
+  if (initComplete) return;
+  db.version(1).stores({
+    metadata: '++path, *name, size, type, createdAt, modifiedAt, directory',
+    files: '++path, blob'
+  })
+  db.version(2).stores({
+    metadata: '++path, *name, size, type, createdAt, modifiedAt, directory, app',
+  })
+  
+  // How to add another version
+  // 1. close browser tab
+  // 2. write a new version above.
+  // 3. update os version in config.json
+  // 4. open browser tab again.
 
-db.version(1).stores({
-  metadata: '++path, *name, size, type, createdAt, modifiedAt, directory',
-  files: '++path, blob'
-})
-db.version(2).stores({
-  metadata: '++path, *name, size, type, createdAt, modifiedAt, directory, app',
-})
+  initComplete = true;
+}
 
 
 
@@ -171,5 +186,6 @@ export default {
   readFile,
   createRootDir,
   readdir,
-  stat
+  stat,
+  init
 }

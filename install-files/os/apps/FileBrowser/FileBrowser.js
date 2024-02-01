@@ -3,8 +3,8 @@
 //ICON_PATH="./icon.webp"
 //END
 
-import fs from "../../../../fs.js";
-import path from "../../../../path.js";
+import fs from "../../fs.js";
+import path from "../../path.js";
 import { Application } from "../../Application.js";
 import { Window } from "../../Window.js";
 import { humanFileSize, styled } from "../../utils.js";

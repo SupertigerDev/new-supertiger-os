@@ -1,8 +1,9 @@
 import config from "../../config.js";
-import fs from "../../fs.js";
+import fs from "../os/fs.js";
 import { Application } from "./Application.js";
 import { getBasePath } from "./utils.js";
 
+fs.init();
 
 export class OS {
     constructor() {

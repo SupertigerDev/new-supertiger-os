@@ -1,41 +1,67 @@
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+
+  <script>
+    fetch("./config.json")
+      .then((res) => res.json())
+      .then((config) => {
+        const updating = !!(localStorage["installed"] && localStorage["version"] !== config.version);
+        
+        const scriptmap = document.createElement("script");
+        scriptmap.type = "importmap";
 
 
-        <script type="importmap">
-            {
-              "imports": {
-                "solid-js": "./hdd/os/solid-js/index.js",
-                "solid-js/web": "./hdd/os/solid-js/web/index.js"
-              }
+        if (localStorage["installed"] && !updating) {
+          scriptmap.innerHTML = `
+                {
+                    "imports": {
+                        "solid-js": "./hdd/os/solid-js/index.js",
+                        "solid-js/web": "./hdd/os/solid-js/web/index.js"
+                    }
+                }
+            `;
+        } else {
+          scriptmap.innerHTML = `
+                {
+                    "imports": {
+                        "solid-js": "./install-files/os/solid-js/index.js",
+                        "solid-js/web": "./install-files/os/solid-js/web/index.js"
+                    }
+                }
+            `;
+        }
+        document.head.appendChild(scriptmap);
+
+        navigator.serviceWorker
+          .register("sw.js", { type: "module" })
+          .then(async function (reg) {
+            if (updating) {
+                await reg.update().then(() => {})
+                await reg.unregister()
             }
-          </script>
-
-
-    </head>
-    <body>
-        <div id="root"></div>
-    </body>
-
-    
-    <script>
-
-        navigator.serviceWorker.register('sw.js', {type: 'module'}).then(function(reg){
-            if (reg.active) console.log('serviceworker installed');
+            if (reg.active) {
+                console.log("serviceworker installed");
+                reg.active.postMessage(JSON.stringify({name: "details", payload: {config, updating}}));
+            }
             else {
-                console.log("reloading");
-                location.reload();
-                return;
+              console.log("reloading");
+              location.reload();
+              return;
             }
-            
-            const script = document.createElement('script');
+
+            const script = document.createElement("script");
             script.src = "./init.js";
             script.type = "module";
-            document.head.appendChild(script); 
-        })
-        .catch(function(err){
-            console.log('registration failed: ' + err)
-        })
-    </script>
+            document.head.appendChild(script);
+          })
+          .catch(function (err) {
+            console.log("registration failed: " + err);
+          });
+      });
+  </script>
 </html>
