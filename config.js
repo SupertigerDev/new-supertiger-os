@@ -1,4 +1,4 @@
+console.log(location.pathname)
 export default {
-    BASEPATH: "/new-supertiger-os/",
-    // BASEPATH: "/",
+    BASEPATH: location.pathname,
 }
