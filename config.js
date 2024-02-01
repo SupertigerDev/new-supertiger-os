@@ -1,5 +1,4 @@
-import { BASEPATH } from "./basepath.js";
-
 export default {
-    BASEPATH: BASEPATH,
+    BASEPATH: "/new-supertiger-os/",
+    // BASEPATH: "/",
 }
