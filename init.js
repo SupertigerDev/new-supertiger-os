@@ -1,9 +1,5 @@
 
 import config from './config.js';
-import fs from './install-files/os/fs.js';
-import path from "./install-files/os/path.js";
-
-fs.init();
 
 
 const ready = () => {
@@ -26,6 +22,10 @@ const ready = () => {
 }
 
 const main = async () => {
+  const path = await (await import('./install-files/os/path.js')).default
+  const fs = await (await import('./install-files/os/fs.js')).default
+  fs.init();
+
   const {render} = await import('./install-files/os/solid-js/web/index.js')
   const html = (await import('./install-files/os/solid-js/html/index.js')).default
   const {Show, onMount} = await import('./install-files/os/solid-js/index.js');
