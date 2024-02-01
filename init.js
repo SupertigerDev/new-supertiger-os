@@ -1,12 +1,9 @@
-import installMap from "./install-map.json" assert { type: "json" };
 
 import fs from './fs.js';
-await fs.createRootDir();
-
 import path from "./path.js";
 
 
-const installed = localStorage["installed"];
+
 
 const ready = () => {
   localStorage["installed"] = true;
@@ -29,8 +26,8 @@ const ready = () => {
 }
 
 const main = async () => {
-
-  // await hdd.clear()
+  await fs.createRootDir();
+  const installMap = await fetch("./install-map.json").then(res => res.json());
 
   for (let i = 0; i < installMap.length; i++) {
     const dir = installMap[i];
@@ -42,6 +39,7 @@ const main = async () => {
   ready();
 }
 
+const installed = localStorage["installed"];
 // if (installed) {
 //   console.log("Already installed");
 //   ready();
