@@ -2,6 +2,7 @@ import { Window } from "./Window.js";
 
 export class Application {
     constructor(name) {
+      this.metadata = null;
       this.id = "a"+crypto.randomUUID();
       this.name = name || this.id;
       this.basePath = "/";

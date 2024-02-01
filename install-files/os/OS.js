@@ -24,6 +24,7 @@ export class OS {
          * @type {Application}
          */
         const app = start();
+        app.metadata = await fs.stat(path);
         app.basePath = getBasePath(import.meta.resolve(config.BASEPATH + "hdd" + path)) + "/"
         this.applications.push(app);
         app._ready()
@@ -41,5 +42,5 @@ os.openApplication("/os/apps/Taskbar.js")
 
 
 setTimeout(() => {
-    os.openApplication("/os/apps/FileBrowser.js")
+    os.openApplication("/os/apps/FileBrowser/FileBrowser.js")
 }, 1000);

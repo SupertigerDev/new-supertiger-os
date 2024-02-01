@@ -80,7 +80,7 @@ const mkdir = async (dirname) => {
   }
   
   for (let i = 0; i < split.length; i++) {
-    const fullPath = "/" + path.join(...split.slice(0, i + 1));
+    const fullPath = path.join(...split.slice(0, i + 1));
     const pathStat = await stat(dirname);
     if (pathStat) {
       return;

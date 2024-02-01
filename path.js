@@ -20,7 +20,7 @@ export const basename = (path) => {
 }
 
 export const join = (...paths) => {
-  return paths.join("/")
+  return "/" + paths.map(part => part?.split("/")).flat().filter(p => p).join("/")
 }
 
 export const stripTrailingSlash = (str) => {

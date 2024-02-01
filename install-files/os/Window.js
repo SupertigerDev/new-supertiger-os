@@ -117,7 +117,7 @@ const createTopBar = (window) => {
 
 
     topBar.innerHTML = `
-        ${window.icon ? `<span class="material-icons-round">${window.icon}</span>` : ''}
+        ${window.icon ? `<img class="icon" src="${window.icon}"></img>` : ''}
         <div class="title">${window.name}</div>
         <div class="closeButton">X</div>
     `

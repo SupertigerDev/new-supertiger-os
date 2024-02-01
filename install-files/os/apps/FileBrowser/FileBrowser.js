@@ -1,19 +1,19 @@
 //ST_A
 //PACKAGE_NAME="supertiger.os.filebrowser"
-//ICON_PATH=""
+//ICON_PATH="./icon.webp"
 //END
 
-import fs from "../../../fs.js";
-import path from "../../../path.js";
-import { Application } from "../Application.js";
-import { Window } from "../Window.js";
-import { humanFileSize, styled } from "../utils.js";
+import fs from "../../../../fs.js";
+import path from "../../../../path.js";
+import { Application } from "../../Application.js";
+import { Window } from "../../Window.js";
+import { humanFileSize, styled } from "../../utils.js";
 
-import {onCleanup, For, createSignal, Show, createEffect, onMount} from '../solid-js/index.js'
-import {render} from '../solid-js/web/index.js'
+import {onCleanup, For, createSignal, Show, createEffect, onMount} from '../../solid-js/index.js'
+import {render} from '../../solid-js/web/index.js'
 
-import html from '../solid-js/html/index.js'
-import OS from "../OS.js";
+import html from '../../solid-js/html/index.js'
+import OS from "../../OS.js";
 
 function start() {
   const app = new Application();
@@ -22,7 +22,7 @@ function start() {
     const win = new Window("File Browser", {
       width: 800,
       height: 600,
-      icon: "folder"
+      icon: app.basePath + app.metadata.app.ICON_PATH,
     });
 
     win.baseElement.insertAdjacentHTML("beforeend", styled(win).css`
@@ -78,6 +78,11 @@ function start() {
           padding: 10px;
           border-radius: 6px;
           transition: background-color 0.2s;
+          .icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+          }
           &.folder .icon {
             color: #ffd165;
           }
@@ -147,7 +152,7 @@ function start() {
       return html`
         <div>
           <${AddressBar} replaceParts=${newParts => setParts(newParts)} parts=${() => parts()} />
-          <${FileList} appendPath=${newPath => setParts([...parts(), newPath])} files=${() => files()} />
+          <${FileList} win=${win} appendPath=${newPath => setParts([...parts(), newPath])} files=${() => files()} />
         </div>
       `;
     }
@@ -211,9 +216,22 @@ const FileList = (props) => {
       })
     })
 
+    const Icon = () => {
+
+      const dirname = () => path.dirname(fileItemProps.path);
+
+      const iconFile = () => metadata()?.app?.ICON_PATH ? path.join("/hdd" + dirname(), metadata()?.app?.ICON_PATH) : null;
+
+
+      return html `
+        <${Show} when=${() => iconFile()}><img class="icon" src=${() => iconFile()}/></Show>
+        <${Show} when=${() => !iconFile()}><span class="icon material-icons-round">${() => metadata()?.app ? "extension" : metadata()?.directory ? "folder" : "insert_drive_file"}</span><//>
+      `
+    }
+
     return html`
       <div class=${() => `fileItem ${metadata()?.directory ? "folder" : "file"}`} ondblclick=${onDblClick}>
-        <span class="icon material-icons-round">${() => metadata()?.app ? "extension" : metadata()?.directory ? "folder" : "insert_drive_file"}</span>
+        <${Icon} />
         ${() => basename()}
         <div class='data'>
             ${() => metadata()?.app ? "Supertiger OS App" : metadata()?.type?.split("/")[1] || "Folder"} ${() => metadata()?.directory ? "" : ` • ${humanFileSize(metadata()?.size)}`}
