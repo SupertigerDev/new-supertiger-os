@@ -12,7 +12,7 @@
         document.getElementById("root").innerHTML = "Unsupported browser. Supertiger OS does not work on Firefox as it is missing some technologies. (Modules in service workers)";
 
     }
-    fetch("./config.json")
+    fetch("./config.json?test=" + Math.random())
       .then((res) => res.json())
       .then((config) => {
         const updating = !!(localStorage["installed"] && localStorage["version"] !== config.version);
