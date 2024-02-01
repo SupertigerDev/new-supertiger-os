@@ -26,7 +26,7 @@ export class Window {
         this.frame = true;
         this.appContainer = createAppContainer(this);
         this.baseElement = createFrame(this);
-        this.zIndex = 0;
+        this.zIndex = null;
     }
     showFrame (value) {
         if (this.baseElement.querySelector(".topBar")) {

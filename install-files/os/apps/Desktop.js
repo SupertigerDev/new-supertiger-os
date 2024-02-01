@@ -19,6 +19,7 @@ function start() {
     win.setHeight(window.innerHeight);
     win.setX(0);
     win.setY(0);
+    win.setZIndex(-1)
 
     window.addEventListener("resize", () => {
       win.setWidth(window.innerWidth);

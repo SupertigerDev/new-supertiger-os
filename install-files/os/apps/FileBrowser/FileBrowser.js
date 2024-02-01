@@ -138,21 +138,29 @@ function start() {
 
     const App = () => {
       const [parts, setParts] = createSignal(["os"]);
-      const [files, setFiles] = createSignal([]);
+      const [fileStats, setFileStats] = createSignal([]);
 
       const fullPath = () => {
         return "/" + parts().join("/");
       }
 
+      const getFileStats = async (path) => {
+        const dirs = await fs.readdir(path);
+        const stats = await Promise.all(dirs.map(async dir => {
+          return fs.stat(dir);
+        }))
+        return stats;
+      }
+
       createEffect(() => {
-        fs.readdir(fullPath()).then(files => setFiles(files))
+        getFileStats(fullPath()).then(stats => setFileStats(stats))
       })
       
 
       return html`
         <div>
           <${AddressBar} replaceParts=${newParts => setParts(newParts)} parts=${() => parts()} />
-          <${FileList} win=${win} appendPath=${newPath => setParts([...parts(), newPath])} files=${() => files()} />
+          <${FileList} win=${win} appendPath=${newPath => setParts([...parts(), newPath])} stats=${() => fileStats()} />
         </div>
       `;
     }
@@ -197,53 +205,61 @@ const AddressBar = (props) => {
 const FileList = (props) => {
   
   const FileItem = (fileItemProps) => {
-    const [metadata, setMetadata] = createSignal(null)
+    const stat = () => fileItemProps.stat;
 
-    const basename = () => path.basename(fileItemProps.path)
+    const basename = () => path.basename(stat().path)
     const onDblClick = () => {
-      if (!metadata()?.directory) {
+      if (!stat().directory) {
         if (basename().endsWith(".js")) {
-          OS.openApplication(fileItemProps.path)
+          OS.openApplication(stat().path)
         }
         return;
       };
       props.appendPath(basename())
     }
 
-    onMount(() => {
-      fs.stat(fileItemProps.path).then((res) => {
-        setMetadata(res)
-      })
-    })
 
     const Icon = () => {
 
-      const dirname = () => path.dirname(fileItemProps.path);
+      const dirname = () => path.dirname(stat().path);
 
-      const iconFile = () => metadata()?.app?.ICON_PATH ? path.join(config.BASEPATH, "/hdd" + dirname(), metadata()?.app?.ICON_PATH) : null;
+      const iconFile = () => stat()?.app?.ICON_PATH ? path.join(config.BASEPATH, "/hdd" + dirname(), stat()?.app?.ICON_PATH) : null;
 
 
       return html `
         <${Show} when=${() => iconFile()}><img class="icon" src=${() => iconFile()}/></Show>
-        <${Show} when=${() => !iconFile()}><span class="icon material-icons-round">${() => metadata()?.app ? "extension" : metadata()?.directory ? "folder" : "insert_drive_file"}</span><//>
+        <${Show} when=${() => !iconFile()}><span class="icon material-icons-round">${() => stat()?.app ? "extension" : stat()?.directory ? "folder" : "insert_drive_file"}</span><//>
       `
     }
 
     return html`
-      <div class=${() => `fileItem ${metadata()?.directory ? "folder" : "file"}`} ondblclick=${onDblClick}>
+      <div class=${() => `fileItem ${stat()?.directory ? "folder" : "file"}`} ondblclick=${onDblClick}>
         <${Icon} />
         ${() => basename()}
         <div class='data'>
-            ${() => metadata()?.app ? "Supertiger OS App" : metadata()?.type?.split("/")[1] || "Folder"} ${() => metadata()?.directory ? "" : ` • ${humanFileSize(metadata()?.size)}`}
+            ${() => stat()?.app ? "Supertiger OS App" : stat()?.type?.split("/")[1] || "Folder"} ${() => stat()?.directory ? "" : ` • ${humanFileSize(stat()?.size)}`}
         </div>
       </div>
     `
   }
+  const sortedStats = () => {
+    return props.stats.sort((a, b) => {
+      if (a.directory && !b.directory) {
+        return -1;
+      }
+      if (!a.directory && b.directory) {
+        return 1;
+      }
+      const basenameA = path.basename(a.path);
+      const basenameB = path.basename(b.path);
+      return basenameA.localeCompare(basenameB);
+    })
+  }
 
   return html`
     <div class="fileList">
-      <${For} each=${() => props.files}>
-        ${(path, i) => html`<${FileItem} path=${() => path} />`}
+      <${For} each=${() => sortedStats()}>
+        ${(stat, i) => html`<${FileItem} stat=${() => stat} />`}
       <//>
     </div>
   `
