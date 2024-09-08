@@ -6,42 +6,42 @@ import { getBasePath } from "./utils.js";
 fs.init();
 
 export class OS {
-    constructor() {
-        /**
-         * @type {Application[]}
-         */
-        this.applications = []
-    }
+  constructor() {
     /**
-     * @param {string} path
+     * @type {Application[]}
      */
-    async openApplication (path) {
-        const metadata = await fs.stat(path);
-        if (!metadata?.app) {
-            return alert("Invalid app")
-        }
-        const {start} = await import(config.BASEPATH + "hdd" + path);
-        /**
-         * @type {Application}
-         */
-        const app = start();
-        app.metadata = await fs.stat(path);
-        app.basePath = getBasePath(import.meta.resolve(config.BASEPATH + "hdd" + path)) + "/"
-        this.applications.push(app);
-        app._ready()
+    this.applications = [];
+  }
+  /**
+   * @param {string} path
+   */
+  async openApplication(path) {
+    const metadata = await fs.stat(path);
+    if (!metadata?.app) {
+      return alert("Invalid app");
     }
+    const { start } = await import(config.BASEPATH + "hdd" + path);
+    /**
+     * @type {Application}
+     */
+    const app = start();
+    app.metadata = await fs.stat(path);
+    app.basePath =
+      getBasePath(import.meta.resolve(config.BASEPATH + "hdd" + path)) + "/";
+    this.applications.push(app);
+    app._ready();
+  }
 }
 
 const os = new OS();
 
 export default {
-    openApplication: (path) => os.openApplication(path)
-}
+  openApplication: (path) => os.openApplication(path),
+};
 
-os.openApplication("/os/apps/Desktop.js")
-os.openApplication("/os/apps/Taskbar.js")
-
+os.openApplication("/os/apps/Desktop.js");
+os.openApplication("/os/apps/Taskbar/Taskbar.js");
 
 setTimeout(() => {
-    os.openApplication("/os/apps/FileBrowser/FileBrowser.js")
+  os.openApplication("/os/apps/FileBrowser/FileBrowser.js");
 }, 1000);
